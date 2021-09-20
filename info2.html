@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Read, write, update, and delete Firebase data</title>
+    </head>
+
+    <body style="background-color: lightblue; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold;">
+        Name: <input id="nameBox" type="text"/><br><br>
+        ID Number: <input id="IDnum" type="text"/><br><br>
+        Section: <input id="section" type="text"/><br><br>
+        Gender: <input id="gender" type="text"/><br><br>
+        
+        <button id="insert">Insert</button>
+        <button id="select">Select</button>
+        <button id="update">Update</button>
+        <button id="delete">Delete</button>
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDbQzxuMDbSICiQt2pkxq5nEJi-LE5vazQ",
+            authDomain: "realtimeupdate2021-f13b2.firebaseapp.com",
+            projectId: "realtimeupdate2021-f13b2",
+            storageBucket: "realtimeupdate2021-f13b2.appspot.com",
+            messagingSenderId: "951519787954",
+            appId: "1:951519787954:web:dc51a4110a2bd2018542ab"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        var name, ID, sec, gen;
+
+        function Ready(){
+            name = document.getElementById('nameBox').value;
+            ID = document.getElementById('IDnum').value;
+            sec = document.getElementById('section').value;
+            gen = document.getElementById('gender').value;
+        }
+
+        insert = document.getElementById('insert');
+        insert.onclick = function(){
+            Ready();
+            firebase.database().ref('student/' + ID).set({
+                NameofStudent: name,
+                IDNum: ID,
+                Section: sec,
+                Gender: gen
+            });
+        }
+
+        //Selecting/searching
+
+        document.getElementById('select').onclick = function(){
+            Ready();
+            firebase.database().ref('student/'+ID).on('value',function(snapshot){
+                document.getElementById('nameBox').value = snapshot.val().NameofStudent;
+                document.getElementById('section').value = snapshot.val().Section;
+                document.getElementById('gender').value = snapshot.val().Gender;
+            });
+        }
+
+        //Updating
+
+        document.getElementById('update').onclick = function(){
+            Ready();
+            firebase.database().ref('student/'+ID).update({
+                NameofStudent: name,
+                Section: sec,
+                Gender: gen
+            });
+        }
+
+        //Deleting
+
+        document.getElementById('delete').onclick = function(){
+            Ready();
+            firebase.database().ref('student/'+ID).remove()
+        }
+
+        </script>
+    </body>
+</html>
