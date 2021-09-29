@@ -1,3 +1,5 @@
+//TODO use onAuthStateChanged to prevent unauthorized account access by changing local storage.
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
 import {
   getAuth,
@@ -5,7 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+import { getDatabase, ref, get, child, set } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCq9KAjaMUnEMz8gVd18bVWeK7hJmHjei0",
@@ -23,44 +25,75 @@ const data = getDatabase(app);
 var name, email, sec, gen;
 
 function fetchVal() {
-  email = document.getElementById("emldisplay").value;
+  email = window.sessionStorage.getItem("email").replace(".", "");
   name = document.getElementById("name").value;
   sec = document.getElementById("sec").value;
   gen = document.getElementById("gnd").value;
 }
 
+function update() {
+  get(
+    child(
+      ref(data),
+      `account/${window.sessionStorage.getItem("email").replace(".", "")}`
+    )
+  ).then((snapshot) => {
+    if (snapshot.exists()) {
+      document.getElementById("name").value = snapshot.val().Nameofaccount;
+      document.getElementById("sec").value = snapshot.val().Section;
+      document.getElementById("gnd").value = snapshot.val().Gender;
+    }
+  });
+}
+
 document.getElementById("signout").addEventListener("click", function () {
-  signOut(auth);
-  alert("Signed out");
-  window.sessionStorage.setItem("email", "");
-  location.href = "index.html";
+  signOut(auth)
+  .catch((error) => {
+    alert("You can't sign out.\nAn error occurred.")
+  })
+  .then(() => {
+    alert("Signed out");
+    window.sessionStorage.setItem("email", "");
+    location.href = "index.html";
+  })
 });
 
 document.getElementById("insert").addEventListener("click", function () {
-  alert("click");
   fetchVal();
-  tmp2 = email.value.replace(".", "");
-  alert();
-  database(data)
-    .ref("account/" + tmp2)
-    .set({
+
+  set(
+    ref(
+      data,
+      "account/" + window.sessionStorage.getItem("email").replace(".", "")
+    ),
+    {
       Nameofaccount: name,
       email: email,
       Section: sec,
       Gender: gen,
-    });
+    }
+  );
+
+  alert("Your data has been saved.");
+
+  update();
 });
 
 document.getElementById("select").addEventListener("click", function () {
   fetchVal();
-  tmp2 = email.value.replace(".", "");
-  database(data)
-    .ref("account/" + tmp2)
-    .on("value", function (snapshot) {
+
+  get(
+    child(
+      ref(data),
+      `account/${window.sessionStorage.getItem("email").replace(".", "")}`
+    )
+  ).then((snapshot) => {
+    if (snapshot.exists()) {
       document.getElementById("name").value = snapshot.val().Nameofaccount;
       document.getElementById("sec").value = snapshot.val().Section;
       document.getElementById("gnd").value = snapshot.val().Gender;
-    });
+    }
+  });
 });
 
 document.getElementById("update").addEventListener("click", function () {
@@ -76,27 +109,26 @@ document.getElementById("update").addEventListener("click", function () {
 });
 
 document.getElementById("delete").addEventListener("click", function () {
-  document.getElementById("delete").onclick = function () {
-    fetchVal();
-    database(data)
-      .ref("account/" + email)
-      .remove();
-  };
+  set(
+    ref(
+      data,
+      "account/" + window.sessionStorage.getItem("email").replace(".", "")
+    ),
+    {
+      Nameofaccount: "Unknown",
+      email: email,
+      Section: "Unknown",
+      Gender: "Unknown",
+    }
+  );
+
+  alert("Wipe successful.");
+
+  update();
 });
 
-//TODO fix this function!
-document.body.onload = function () {
-  tmp = window.sessionStorage.getItem("email");
-  alert(tmp + "ja bitte!");
-  // document.getElementById("emldisplay").value = tmp;
+window.onload = function () {
+  document.getElementById("emldisplay").value = window.sessionStorage.getItem("email");
 
-  // tmp2 = tmp.replace(".", "");
-
-  // database(data)
-  //   .ref("account/" + tmp2)
-  //   .on("value", function (snapshot) {
-  //     document.getElementById("name").value = snapshot.val().Nameofaccount;
-  //     document.getElementById("sec").value = snapshot.val().Section;
-  //     document.getElementById("gnd").value = snapshot.val().Gender;
-  //   });
+  update();
 };

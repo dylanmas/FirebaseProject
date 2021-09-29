@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCq9KAjaMUnEMz8gVd18bVWeK7hJmHjei0",
@@ -51,11 +51,10 @@ document.getElementById("signup").addEventListener("click", function () {
     alert(error.message);
   })
 
-  tmp2 = email1.value.replace(".", "");
-  firebase
-    .database()
-    .ref("account/" + tmp2)
-    .set({
-      email: email1.value,
-    });
+  set(ref(data, "account/" + email1.value.replace(".", "")), {
+    Nameofaccount: "Unknown",
+    email: email1.value,
+    Section: "Unknown",
+    Gender: "Unknown",
+  });
 });

@@ -8,24 +8,29 @@
         <script defer type="module" src="info.js"></script>
     </head>
 
-    <body style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" onload="autofill">
+    <body style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
 
-        <h1 style="color:white">Your account info:</h1>
+        <img style="height: 90px; margin-top: 10px;" src="https://www.north49.com/wp-content/uploads/2017/01/White-Login-Icon.png">
 
-        <input type="email" id="emldisplay" class="input">
+        <h1 style="color:white; margin-top: 0px;">Your account info:</h1>
+
+        <a style="color:white; font-weight: bold;">Account:</a><br>
+        <input type="email" id="emldisplay" class="input" style="color: white;" disabled>
         <br><br>
+        <a style="color:white; font-weight: bold;">Name:</a><br>
         <input type="text" id="name" class="input" placeholder="Name">
         <br><br>
+        <a style="color:white; font-weight: bold;">Section:</a><br>
         <input type="text" id="sec" class="input" placeholder="Section">
         <br><br>
+        <a style="color:white; font-weight: bold;">Gender:</a><br>
         <input type="text" id="gnd" class="input" placeholder="Gender">
         <br><br>
 
-        <button id="fetch" class="button">Fetch</button>
-        <button id="insert" class="button">Insert</button>
-        <button id="select" class="button">Select</button>
-        <button id="update" class="button">Update</button>
-        <button id="delete" class="button">Delete</button>
+        <button id="select" class="button" hidden>Get info</button>
+        <button id="insert" class="button">Change info</button>
+        <button id="update" class="button" hidden>Update</button>
+        <button id="delete" class="button">Wipe info</button>
         <button id="signout" class="button">Log out</button>
     </body>
 </html>
