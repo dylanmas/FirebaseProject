@@ -75,7 +75,7 @@ document.getElementById("update").addEventListener("click", function () {
     });
 });
 
-document.getElementById(remove).addEventListener("click", function () {
+document.getElementById("delete").addEventListener("click", function () {
   document.getElementById("delete").onclick = function () {
     fetchVal();
     database(data)

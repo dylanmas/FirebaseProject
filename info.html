@@ -4,12 +4,13 @@
     <head>
         <meta charset="UTF-8">
         <title>My account</title>
-
+        <link rel="stylesheet" href="style.css">
+        <script defer type="module" src="info.js"></script>
     </head>
 
     <body style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" onload="autofill">
 
-        <h1>Your account info:</h1>
+        <h1 style="color:white">Your account info:</h1>
 
         <input type="email" id="emldisplay" class="input">
         <br><br>
@@ -20,12 +21,11 @@
         <input type="text" id="gnd" class="input" placeholder="Gender">
         <br><br>
 
+        <button id="fetch" class="button">Fetch</button>
         <button id="insert" class="button">Insert</button>
         <button id="select" class="button">Select</button>
         <button id="update" class="button">Update</button>
         <button id="delete" class="button">Delete</button>
         <button id="signout" class="button">Log out</button>
-
-        <script defer type="module" src="info.js"></script>
     </body>
 </html>

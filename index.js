@@ -18,7 +18,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-//const data = getDatabase(app);
+const data = getDatabase(app);
 
 document.getElementById("login").addEventListener("click", function () {
   var email = document.getElementById("eml");
@@ -34,9 +34,7 @@ document.getElementById("login").addEventListener("click", function () {
       // ...
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage);
+      alert(error.message);
       // ..
     });
 });
@@ -44,13 +42,14 @@ document.getElementById("login").addEventListener("click", function () {
 document.getElementById("signup").addEventListener("click", function () {
   var email1 = document.getElementById("eml");
   var password = document.getElementById("pwd");
-  const tmp = createUserWithEmailAndPassword(
-    auth,
-    email1.value,
-    password.value
-  );
 
-  tmp.catch((e) => alert(e.message));
+  createUserWithEmailAndPassword(auth, email1.value, password.value)
+  .then(() => {
+    alert("Account creation successful!\nYou can sign in to your account now.");
+  })
+  .catch((error) => {
+    alert(error.message);
+  })
 
   tmp2 = email1.value.replace(".", "");
   firebase
