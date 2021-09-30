@@ -7,7 +7,14 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
-import { getDatabase, ref, get, child, set } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  get,
+  child,
+  set,
+  update,
+} from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCq9KAjaMUnEMz8gVd18bVWeK7hJmHjei0",
@@ -31,7 +38,7 @@ function fetchVal() {
   gen = document.getElementById("gnd").value;
 }
 
-function update() {
+function showinfo() {
   get(
     child(
       ref(data),
@@ -48,14 +55,14 @@ function update() {
 
 document.getElementById("signout").addEventListener("click", function () {
   signOut(auth)
-  .catch((error) => {
-    alert("You can't sign out.\nAn error occurred.")
-  })
-  .then(() => {
-    alert("Signed out");
-    window.sessionStorage.setItem("email", "");
-    location.href = "index.html";
-  })
+    .catch((error) => {
+      alert("You can't sign out.\nAn error occurred.");
+    })
+    .then(() => {
+      alert("Signed out");
+      window.sessionStorage.setItem("email", "");
+      location.href = "index.html";
+    });
 });
 
 document.getElementById("insert").addEventListener("click", function () {
@@ -76,7 +83,7 @@ document.getElementById("insert").addEventListener("click", function () {
 
   alert("Your data has been saved.");
 
-  update();
+  showinfo();
 });
 
 document.getElementById("select").addEventListener("click", function () {
@@ -109,14 +116,14 @@ document.getElementById("update").addEventListener("click", function () {
 });
 
 document.getElementById("delete").addEventListener("click", function () {
-  set(
+  update(
     ref(
       data,
       "account/" + window.sessionStorage.getItem("email").replace(".", "")
     ),
     {
       Nameofaccount: "Unknown",
-      email: email,
+      email: window.sessionStorage.getItem("email"),
       Section: "Unknown",
       Gender: "Unknown",
     }
@@ -124,11 +131,12 @@ document.getElementById("delete").addEventListener("click", function () {
 
   alert("Wipe successful.");
 
-  update();
+  showinfo();
 });
 
 window.onload = function () {
-  document.getElementById("emldisplay").value = window.sessionStorage.getItem("email");
+  document.getElementById("emldisplay").value =
+    window.sessionStorage.getItem("email");
 
-  update();
+  showinfo();
 };
